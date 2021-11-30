@@ -22,9 +22,8 @@ char *get_next_line(int fd)
         end++;
         if (end == BUFFER_SIZE)
         {
-            substring = (char *)malloc(end);
-            strncpy(substring, reference, end);
-            read(fd, reference, BUFFER_SIZE);
+            ft_strlcat(substring, reference, end);
+            read(fd, reference, BUFFER_
             add = end;
             end = 0;
         }

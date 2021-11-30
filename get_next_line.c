@@ -6,11 +6,10 @@
 #include<sys/stat.h>
 #include <fcntl.h>
 
-// !!! ESTAS A USAR A FUNCAO STRLEN ORIGINAL - MUDA PARA FT_STRLEN
+/* !!! ESTAS A USAR A FUNCAO STRLEN ORIGINAL - MUDA PARA FT_STRLEN
+// 
 //
 //
-//
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*new;
@@ -37,51 +36,49 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	new[i] = '\0';
 	return (new);
-}
+}*/
+
 char *get_next_line(int fd)
 {
-	const char *newline = "\n";
-    static char *reference = "\n";
+    static char reference[] = "&";
     char *substring = "";
     size_t end = 0;
-    //size_t add = 0;
-	int 	r = 0;
 	
-    if (fd < 0)
-        return (NULL);
-    if (reference == newline)
+	// verificar se o ficheiro existe OU se a referencia aponta para o final do ficheiro
+    if (fd < 0 || *reference == '\0')
+        return (0);
+	
+	// ler o ficheiro SE o conteudo da referencia for a flag
+    if (*reference == '&')
 	{
-		reference = (char *)malloc(BUFFER_SIZE + 1);
+		//apagar o conteudo da referencia e atribuir novo valor
+		free(reference);
+		reference = (char *)malloc(BUFFER_SIZE);
 		if (!reference)
 			return (0);
-        r = read(fd, reference, BUFFER_SIZE);
-		reference[r] = '\0';
+        end = read(fd, reference, BUFFER_SIZE);
+		reference[end] = '\0';
 	}
-    while (reference[end])
-    {
-        end++;
-        if (end == BUFFER_SIZE || reference[end] == '\n')
-        {
-            ft_strjoin(substring, reference);
-			//free (reference);
-			reference = (char *)malloc(BUFFER_SIZE + 1);
-			if (!reference)
-				return (0);
-			r = read(fd, reference, BUFFER_SIZE);
-			reference[r] = '\0';
-        }
-    }
-    ft_strjoin(substring, reference);
-    while (*reference != *newline)
-	{
-        reference++;
-		if (reference == NULL)
-			return (0);
-	}
-    return (substring);
-}
 
-int main(void)
+	//enquanto nao chegar ao final do ficheiro
+	end = 0;
+    while (reference[end] != '\0')
+    {
+		//se encontrar uma quebra de libra
+        if (reference[end] == '\n' || reference[end + 1] == '\0')
+		{
+            substring = ft_strjoin(substring, reference);
+			if (end + 1 == BUFFER_SIZE)
+				*reference = '&';
+				//se for igual ao buffer_size entao tem de ler outra vez
+			else
+				reference = reference + (end + 1);
+			return (substring);
+		}
+		end++;
+    }
+
+/*int main(void)
 {
 	int fd;
 	char *line;
@@ -93,4 +90,4 @@ int main(void)
 		printf("%s" , line);
 		i++;
 	}
-}
+}*/
