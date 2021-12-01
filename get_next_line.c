@@ -6,7 +6,7 @@
 #include<sys/stat.h>
 #include <fcntl.h>
 
-/* !!! ESTAS A USAR A FUNCAO STRLEN ORIGINAL - MUDA PARA FT_STRLEN
+ !!! ESTAS A USAR A FUNCAO STRLEN ORIGINAL - MUDA PARA FT_STRLEN
 // 
 //
 //
@@ -36,20 +36,21 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	new[i] = '\0';
 	return (new);
-}*/
+}
 
 char *get_next_line(int fd)
 {
-    static char reference[] = "&";
+    static char *reference = '\0';
     char *substring = "";
     size_t end = 0;
+	static char flag[] = "0";
 	
 	// verificar se o ficheiro existe OU se a referencia aponta para o final do ficheiro
-    if (fd < 0 || *reference == '\0')
+    if (fd < 0)
         return (0);
 	
-	// ler o ficheiro SE o conteudo da referencia for a flag
-    if (*reference == '&')
+	// ler o ficheiro SE o conteudo da referencia for o NULL
+    if (*reference == '\0')
 	{
 		//apagar o conteudo da referencia e atribuir novo valor
 		free(reference);
@@ -57,6 +58,9 @@ char *get_next_line(int fd)
 		if (!reference)
 			return (0);
         end = read(fd, reference, BUFFER_SIZE);
+		//se estivermos no final do ficheiro mudar o valor da flag
+		if (end != BUFFER_SIZE)
+			*flag = '1';
 		reference[end] = '\0';
 	}
 
@@ -68,9 +72,8 @@ char *get_next_line(int fd)
         if (reference[end] == '\n' || reference[end + 1] == '\0')
 		{
             substring = ft_strjoin(substring, reference);
-			if (end + 1 == BUFFER_SIZE)
-				*reference = '&';
-				//se for igual ao buffer_size entao tem de ler outra vez
+			if (reference[end + 1] == '\0' && *flag != 1) 
+				//ler outra vez o ficheiro
 			else
 				reference = reference + (end + 1);
 			return (substring);
@@ -78,7 +81,7 @@ char *get_next_line(int fd)
 		end++;
     }
 
-/*int main(void)
+int main(void)
 {
 	int fd;
 	char *line;
@@ -90,4 +93,4 @@ char *get_next_line(int fd)
 		printf("%s" , line);
 		i++;
 	}
-}*/
+}
