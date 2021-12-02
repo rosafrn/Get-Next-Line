@@ -1,4 +1,7 @@
 primeira
 segunda
-terceira
+terceia
+hello
+maria
+astraunauta voador voas tao alto
 fim
