@@ -6,6 +6,43 @@
 #include<sys/stat.h>
 #include <fcntl.h>
 
+//esta função aloca memoria para a string s1 e atribui o valor ""
+char * ft_strdup(const char *s)
+{
+	char *str;
+
+	str = malloc(sizeof(char) * 2);
+	if (!str)
+		return (NULL);
+	str[0] = *s;
+	str[1] = '\0';
+	return(str);
+}
+
+//esta função cria uma substring de s iniciando no index i passado como parametro
+char *ft_substr(char *s, size_t i)
+{
+	char *str;
+	size_t x = 0;
+
+	if (!s)
+		return (0);
+	str = malloc(sizeof(char) * (strlen(s) - i));
+	if (!str)
+		return (NULL);
+	while (s[i])
+	{
+		str[x] = s[i];
+		x++;
+		i++;
+	}
+	//printf("%s\n", reference);
+	str[x] = '\0';
+	//printf("%s\n", str);
+	return(str);
+
+
+}
 //esta função concatena s1 com n bytes de s2
 char	*ft_strnjoin(char *s1, char *s2, size_t n)
 {
@@ -31,18 +68,21 @@ char	*ft_strnjoin(char *s1, char *s2, size_t n)
 	return (new);
 }
 
+
 char *get_next_line(int fd)
 {
-    static char *reference = "\0";
-    char *substring = "";
+    static char *reference = NULL;
+    char *substring = NULL;
+	char *temp;
     size_t end = 0;
 	static int flag = 0;
 	
-    if (fd < 0 || BUFFER_SIZE < 0)
+    if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
+
     while (flag == 0)
 	{
-		if (*reference == '\0')
+		if (reference == NULL)
 		{
 			reference = (char *)malloc(BUFFER_SIZE + 1);
 			if (!reference)
@@ -60,14 +100,25 @@ char *get_next_line(int fd)
     	{
         	if (reference[end] == '\n')
 			{
-           		substring = ft_strnjoin(substring, reference, (end + 1));
-				reference = reference + (end + 1);
+				if (!substring)
+					substring = ft_strdup("");
+           		temp = ft_strnjoin(substring, reference, (end + 1));
+				free(substring);
+				substring = temp;
+				temp = ft_substr(reference, (end + 1));
+				free(reference);
+				reference = temp;
 				return (substring);	
 			}
 			end++;
     	}
-		substring = ft_strnjoin(substring, reference, end);
-		reference = reference + end;
+		if (!substring)
+			substring = ft_strdup("");
+		temp = ft_strnjoin(substring, reference, end);
+		free(substring);
+		substring = temp;
+		free(reference);
+		reference = NULL;
 	}
 	return (NULL);
 }
