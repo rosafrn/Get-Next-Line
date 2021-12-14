@@ -27,7 +27,7 @@ char *ft_substr(char *s, size_t i)
 
 	if (!s)
 		return (0);
-	str = malloc(sizeof(char) * (strlen(s) - i));
+	str = malloc(sizeof(char) * ((strlen(s) - i) + 1));
 	if (!str)
 		return (NULL);
 	while (s[i])
