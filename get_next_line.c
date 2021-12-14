@@ -108,6 +108,7 @@ char *get_next_line(int fd)
 				temp = ft_substr(reference, (end + 1));
 				free(reference);
 				reference = temp;
+				temp = NULL;
 				return (substring);	
 			}
 			end++;
@@ -117,6 +118,7 @@ char *get_next_line(int fd)
 		temp = ft_strnjoin(substring, reference, end);
 		free(substring);
 		substring = temp;
+		temp = NULL;
 		free(reference);
 		reference = NULL;
 	}
@@ -129,7 +131,7 @@ int main(void)
 	char *line;
 	int i = 0;
 	fd = open("texto.txt", O_RDONLY);
-	while (i < 8)
+	while (i < 10)
 	{
 		line = get_next_line(fd);
 		printf("%s" , line);
