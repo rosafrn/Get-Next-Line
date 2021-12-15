@@ -27,7 +27,7 @@ char *ft_substr(char *s, size_t i)
 
 	if (!s)
 		return (0);
-	str = malloc(sizeof(char) * ((strlen(s) - i) + 1));
+	str = malloc(sizeof(char) * ((strlen(s) - i) +1));
 	if (!str)
 		return (NULL);
 	while (s[i])
@@ -47,8 +47,8 @@ char *ft_substr(char *s, size_t i)
 char	*ft_strnjoin(char *s1, char *s2, size_t n)
 {
 	char	*new;
-	int		i;
-	int		j;
+	size_t		i;
+	size_t		j;
 
 	if (!s1 || !s2)
 		return (0);
@@ -60,7 +60,10 @@ char	*ft_strnjoin(char *s1, char *s2, size_t n)
 		return (0);
 	i = 0;
 	while (s1[i] != '\0')
-		new[i++] = s1[i];
+	{
+		new[i] = s1[i];
+		i++;
+	}
 	j = 0;
 	while (j != n)
 		new[i++] = s2[j++];
@@ -72,14 +75,14 @@ char	*ft_strnjoin(char *s1, char *s2, size_t n)
 char *get_next_line(int fd)
 {
     static char *reference = NULL;
-    char *substring = NULL;
+    char *substring;
 	char *temp;
     size_t end = 0;
 	static int flag = 0;
 	
-    if (fd < 0 || BUFFER_SIZE <= 0)
+	substring = NULL;
+    if (fd < 0 || BUFFER_SIZE <= 0 )
         return (NULL);
-
     while (flag == 0)
 	{
 		if (reference == NULL)
@@ -90,6 +93,7 @@ char *get_next_line(int fd)
         	end = read(fd, reference, BUFFER_SIZE);
 			if (end == 0)
 			{
+				free (reference);
 				flag = flag + 1;
 				return (substring);
 			}
@@ -108,7 +112,6 @@ char *get_next_line(int fd)
 				temp = ft_substr(reference, (end + 1));
 				free(reference);
 				reference = temp;
-				temp = NULL;
 				return (substring);	
 			}
 			end++;
@@ -118,24 +121,23 @@ char *get_next_line(int fd)
 		temp = ft_strnjoin(substring, reference, end);
 		free(substring);
 		substring = temp;
-		temp = NULL;
 		free(reference);
 		reference = NULL;
 	}
 	return (NULL);
 }
 
-int main(void)
-{
-	int fd;
-	char *line;
-	int i = 0;
-	fd = open("texto.txt", O_RDONLY);
-	while (i < 10)
-	{
-		line = get_next_line(fd);
-		printf("%s" , line);
-		i++;
-	}
-	//printf("%s", line);
-}
+// int main(void)
+// {
+// 	int fd;
+// 	char *line;
+// 	int i = 0;
+// 	fd = open("texto.txt", O_RDONLY);
+// 	while (i < 2)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("%s" , line);
+// 		i++;
+// 	}
+// 	//printf("%s", line);
+// }
