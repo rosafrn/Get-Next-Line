@@ -116,6 +116,14 @@ char *get_next_line(int fd)
 			}
 			end++;
     	}
+		// if (reference[0] == '\0')
+		// 	{
+		// 		// if (!substring)
+		// 		// 	substring = ft_strdup("");
+		// 		// free (substring);
+		// 		free (reference);
+		// 		return (NULL);
+		// 	}
 		if (!substring)
 			substring = ft_strdup("");
 		temp = ft_strnjoin(substring, reference, end);

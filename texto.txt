@@ -1,7 +1,1 @@
-primeira
-segunda
-terceia
-hello
-maria
-astraunauta voador voas tao alto
-fim
+PRIMEIRA
