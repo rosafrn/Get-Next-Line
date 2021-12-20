@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-void ft_read(char **reference, char **line, size_t end)
+void ft_concat(char **reference, char **line, size_t end)
 {
 	char *temp = NULL;
 
@@ -32,42 +32,52 @@ void ft_read(char **reference, char **line, size_t end)
 	}
 }
 
+char *ft_read(int fd, char **reference, char **line, size_t end, int *flag)
+{
+	*reference = (char *)malloc(BUFFER_SIZE + 1);
+	if (!*reference)
+		return (NULL);
+    end = read(fd, *reference, BUFFER_SIZE);
+	if (end == 0)
+	{
+		free (*reference);
+		*flag = *flag + 1;
+		if (!*line)
+			return (NULL);
+		if (**line == '\0')
+		{
+			free (*line);
+			return (NULL);
+		}
+		return (*line);
+	}
+	if (end < 0)
+	{
+		free (*reference);
+		return (NULL);
+	}
+	reference[0][end] = '\0';
+	return (*reference);
+}
+
 char *get_next_line(int fd)
 {
     static char *reference = NULL;
     char *line = NULL;
-    int end = 0;
+    int end;
 	static int flag = 0;
 	
-    if (fd < 0 || BUFFER_SIZE <= 0)
+    if (fd < 0 || fd > 1024 || read(fd, 0, 0) == -1 || BUFFER_SIZE <= 0)
         return (NULL);
     while (flag == 0)
 	{
 		if (reference == NULL)
 		{
-			reference = (char *)malloc(BUFFER_SIZE + 1);
+			reference = ft_read(fd, &reference, &line, end, &flag);
 			if (!reference)
 				return (NULL);
-        	end = read(fd, reference, BUFFER_SIZE);
-			if (end == 0)
-			{
-				free (reference);
-				flag = flag + 1;
-				if (!line)
-					return (NULL);
-				if (*line == '\0')
-				{
-					free (line);
-					return (NULL);
-				}
-				return (line);
-			}
-			if (end < 0)
-			{
-				free (reference);
-				return (NULL);
-			}
-			reference[end] = '\0';
+			if (flag == 1)
+				return (reference);
 		}
 		end = 0;
     	while (reference[end] != '\0')
@@ -76,14 +86,14 @@ char *get_next_line(int fd)
 			{
 				if (!line)
 					line = ft_strdup("");
-				ft_read(&reference, &line, (end + 1));
+				ft_concat(&reference, &line, (end + 1));
 				return (line);	
 			}
 			end++;
     	}
 		if (!line)
 			line = ft_strdup("");
-		ft_read(&reference, &line, end);
+		ft_concat(&reference, &line, end);
 	}
 	return (NULL);
 }
