@@ -6,12 +6,14 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/19 18:21:49 by rosferna          #+#    #+#             */
-/*   Updated: 2021/12/29 17:38:43 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:43:20 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+//esta funcao concatena reference e line 
+//e atualiza o valor da variavel estatica reference
 void	ft_concat(char **reference, char **line, size_t end)
 {
 	char	*temp;
@@ -32,6 +34,9 @@ void	ft_concat(char **reference, char **line, size_t end)
 	}
 }
 
+//esta funcao le BUFFER_SIZE bytes do ficheiro para a reference
+//retorna a reference ou a line, se ja nao houver nada para ler
+//retorna NULL se encontrar o final do ficheiro
 char	*ft_read(int fd, char **reference, char **line, int *flag)
 {
 	int	end;
@@ -60,7 +65,8 @@ char	*ft_read(int fd, char **reference, char **line, int *flag)
 	return (*reference);
 }
 
-void	blabla(char **reference, char **line)
+//este funcao encontra o uma quebra de linha ou o final da reference
+void	ft_findend(char **reference, char **line)
 {
 	int	end;
 
@@ -99,12 +105,10 @@ char	*get_next_line(int fd)
 		if (reference == NULL)
 		{
 			reference = ft_read(fd, &reference, &line, &flag);
-			if (!reference)
-				return (NULL);
 			if (flag == 1)
 				return (reference);
 		}
-		blabla(&reference, &line);
+		ft_findend(&reference, &line);
 		if (reference != NULL)
 			return (line);
 	}

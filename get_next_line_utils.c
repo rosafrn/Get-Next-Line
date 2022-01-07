@@ -6,11 +6,21 @@
 /*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:36:49 by rosferna          #+#    #+#             */
-/*   Updated: 2021/12/29 17:37:53 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:55:32 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
 
 //esta função aloca memoria para a string s1 e atribui o valor ""
 char	*ft_strdup(const char *s)
@@ -35,7 +45,7 @@ char	*ft_substr(char *s, size_t i)
 	x = 0;
 	if (!s)
 		return (0);
-	str = malloc(sizeof(char) * ((strlen(s) - i) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen(s) - i) + 1));
 	if (!str)
 		return (NULL);
 	while (s[i])
