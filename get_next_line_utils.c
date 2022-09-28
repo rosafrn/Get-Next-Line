@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rosferna <rosferna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rosferna <rosferna@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 17:36:49 by rosferna          #+#    #+#             */
-/*   Updated: 2022/01/07 17:55:32 by rosferna         ###   ########.fr       */
+/*   Updated: 2022/09/28 20:50:56 by rosferna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 size_t	ft_strlen(char *s)
 {
+
+
+
+
+
+
+
+	
 	size_t	i;
 
 	i = 0;
